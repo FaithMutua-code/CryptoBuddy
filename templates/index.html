@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoBuddy - Your AI Financial Sidekick</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        opacity: 0.9;
+        font-size: 1.1em;
+      }
+
+      .chat-container {
+        height: 500px;
+        overflow-y: auto;
+        padding: 20px;
+        background: #f8f9fa;
+      }
+
+      .message {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .user-message {
+        justify-content: flex-end;
+      }
+
+      .bot-message {
+        justify-content: flex-start;
+      }
+
+      .message-bubble {
+        max-width: 70%;
+        padding: 15px 20px;
+        border-radius: 20px;
+        position: relative;
+      }
+
+      .user-message .message-bubble {
+        background: #3498db;
+        color: white;
+        border-bottom-right-radius: 5px;
+      }
+
+      .bot-message .message-bubble {
+        background: white;
+        color: #333;
+        border: 1px solid #e1e8ed;
+        border-bottom-left-radius: 5px;
+      }
+
+      .message-time {
+        font-size: 0.8em;
+        opacity: 0.7;
+        margin-top: 5px;
+      }
+
+      .details-box {
+        background: #f8f9fa;
+        border-left: 4px solid #3498db;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 10px;
+        font-size: 0.9em;
+        white-space: pre-line;
+      }
+
+      .input-container {
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #e1e8ed;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      #user-input {
+        flex: 1;
+        padding: 15px 20px;
+        border: 2px solid #e1e8ed;
+        border-radius: 25px;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      #user-input:focus {
+        border-color: #3498db;
+      }
+
+      #send-btn {
+        padding: 15px 25px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: transform 0.2s;
+      }
+
+      #send-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .disclaimer {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 15px;
+        margin: 20px;
+        border-radius: 10px;
+        font-size: 0.9em;
+        text-align: center;
+      }
+
+      .quick-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+
+      .quick-btn {
+        padding: 8px 16px;
+        background: #e9ecef;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+
+      .quick-btn:hover {
+        background: #dee2e6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🤖 CryptoBuddy</h1>
+        <p>Your AI-Powered Financial Sidekick</p>
+      </div>
+
+      <div class="disclaimer">
+        ⚠️ <strong>Disclaimer:</strong> This is an educational tool, not
+        financial advice. Cryptocurrency investments are risky. Always do your
+        own research!
+      </div>
+
+      <div class="chat-container" id="chat-messages">
+        <!-- Messages will appear here -->
+      </div>
+
+      <div class="input-container">
+        <div class="quick-buttons">
+          <button
+            class="quick-btn"
+            onclick="sendQuickMessage('profitable coins')"
+          >
+            💰 Profitable
+          </button>
+          <button
+            class="quick-btn"
+            onclick="sendQuickMessage('sustainable coins')"
+          >
+            🌱 Sustainable
+          </button>
+          <button
+            class="quick-btn"
+            onclick="sendQuickMessage('balanced recommendation')"
+          >
+            ⚖️ Balanced
+          </button>
+          <button class="quick-btn" onclick="sendQuickMessage('help')">
+            ❓ Help
+          </button>
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Ask about cryptocurrencies..."
+            onkeypress="handleKeyPress(event)"
+          />
+          <button id="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let chatHistory = [];
+
+      function addMessage(sender, message, details = "", timestamp = "") {
+        const chatMessages = document.getElementById("chat-messages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}-message`;
+
+        const bubbleDiv = document.createElement("div");
+        bubbleDiv.className = "message-bubble";
+        bubbleDiv.innerHTML = message;
+
+        if (timestamp) {
+          const timeDiv = document.createElement("div");
+          timeDiv.className = "message-time";
+          timeDiv.textContent = timestamp;
+          bubbleDiv.appendChild(timeDiv);
+        }
+
+        if (details) {
+          const detailsDiv = document.createElement("div");
+          detailsDiv.className = "details-box";
+          detailsDiv.innerHTML = details;
+          bubbleDiv.appendChild(detailsDiv);
+        }
+
+        messageDiv.appendChild(bubbleDiv);
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function sendMessage() {
+        const userInput = document.getElementById("user-input");
+        const message = userInput.value.trim();
+
+        if (message === "") return;
+
+        // Add user message to chat
+        addMessage(
+          "user",
+          message,
+          "",
+          new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        );
+
+        // Clear input
+        userInput.value = "";
+
+        // Send to backend
+        fetch("/send_message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: message }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            addMessage("bot", data.bot_response, data.details, data.timestamp);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            addMessage(
+              "bot",
+              "Sorry, I encountered an error. Please try again."
+            );
+          });
+      }
+
+      function sendQuickMessage(message) {
+        document.getElementById("user-input").value = message;
+        sendMessage();
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      }
+
+      // Add welcome message when page loads
+      window.onload = function () {
+        setTimeout(() => {
+          addMessage(
+            "bot",
+            "👋 Hello! I'm CryptoBuddy, your AI-powered financial sidekick!",
+            "I can help you find profitable and sustainable cryptocurrencies. Try asking me about:\n• Profitable coins 📈\n• Sustainable coins 🌱\n• Balanced recommendations ⚖️\n• Specific coins like Bitcoin or Ethereum",
+            new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          );
+        }, 500);
+      };
+    </script>
+  </body>
+</html>
