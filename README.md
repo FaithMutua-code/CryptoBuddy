@@ -1,6 +1,6 @@
 # 💰 CryptoBuddy Pro - Your AI Financial Advisor 💸
 
-![CryptoBuddy Pro Logo](https://via.placeholder.com/150)
+![CryptoBuddy Pro Logo](static/logo.png)
 
 ## Overview
 
@@ -26,7 +26,12 @@ _Caption_: CryptoBuddy Pro's interface with real-time market status and NLP-driv
 
 ### Python Backend (app.py)
 
-![app.py Screenshot](screenshots/app-py.png)
+![app.py Screenshot](static/screenshots/app1.png)
+![app.py Screenshot](static/screenshots/app2.png)
+![app.py Screenshot](static/screenshots/app3.png)
+![app.py Screenshot](static/screenshots/app4.png)
+![app.py Screenshot](static/screenshots/app5.png)
+![app.py Screenshot](static/screenshots/app6.png)
 _Caption_: The Flask backend with CoinGecko API integration and NLP processing. 💻💸
 
 ## Installation
