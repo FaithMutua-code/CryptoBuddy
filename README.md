@@ -21,7 +21,7 @@ CryptoBuddy Pro is an advanced AI-powered chatbot designed to guide users throug
 
 ### Chatbot Interface
 
-![Chatbot Interface](screenshots/chatbot-interface.png)
+![Chatbot Interface](static/screenshots/chatbot-interface.png)
 _Caption_: CryptoBuddy Pro's interface with real-time market status and NLP-driven responses. 💬💰
 
 ### Python Backend (app.py)
