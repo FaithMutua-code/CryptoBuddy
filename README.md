@@ -16,7 +16,7 @@ CryptoBuddy is an AI-powered chatbot designed to assist users in exploring crypt
 ## Screenshots
 
 ### Chatbot Interface
-![Chatbot Interface](screenshots/chatbot-interface.png)
+![Chatbot Interface](static/screenshots/chatbot-interface.png)
 *Caption*: The main CryptoBuddy interface showing a conversation with the bot. 💬💰
 
 ### Python Backend (app.py)
