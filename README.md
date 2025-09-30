@@ -56,7 +56,7 @@ _Caption_: The Flask backend with CoinGecko API integration and NLP processing. 
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/your-username/cryptobuddy.git
+   git clone https://github.com/FaithMutua-code/cryptobuddy.git
    cd cryptobuddy
    ```
 
