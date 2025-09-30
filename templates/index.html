@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CryptoBuddy - Your AI Financial Sidekick</title>
+    <title>CryptoBuddy Pro - AI Financial Advisor</title>
     <style>
       * {
         margin: 0;
@@ -19,7 +19,7 @@
       }
 
       .container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
         background: white;
         border-radius: 20px;
@@ -42,6 +42,15 @@
       .header p {
         opacity: 0.9;
         font-size: 1.1em;
+      }
+
+      .market-status {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9em;
+        font-weight: bold;
       }
 
       .chat-container {
@@ -171,54 +180,84 @@
       .quick-btn:hover {
         background: #dee2e6;
       }
+
+      .typing-indicator {
+        display: none;
+        padding: 10px 20px;
+        color: #666;
+        font-style: italic;
+        text-align: center;
+      }
+
+      .urgency-high {
+        background: #fff3cd !important;
+        border: 1px solid #ffeaa7 !important;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <h1>🤖 CryptoBuddy</h1>
-        <p>Your AI-Powered Financial Sidekick</p>
+        <h1>🤖 CryptoBuddy Pro</h1>
+        <p>AI-Powered Financial Advisor with Real-time Data & NLP</p>
+      </div>
+
+      <div class="market-status" id="market-status">
+        📊 Loading real-time market data from CoinGecko...
       </div>
 
       <div class="disclaimer">
-        ⚠️ <strong>Disclaimer:</strong> This is an educational tool, not
-        financial advice. Cryptocurrency investments are risky. Always do your
-        own research!
+        ⚠️ <strong>Disclaimer:</strong> Real-time data from CoinGecko API.
+        Educational use only. Cryptocurrency investments are risky. Always do
+        your own research!
       </div>
 
       <div class="chat-container" id="chat-messages">
         <!-- Messages will appear here -->
       </div>
 
+      <div class="typing-indicator" id="typing-indicator">
+        CryptoBuddy is analyzing market data...
+      </div>
+
       <div class="input-container">
         <div class="quick-buttons">
           <button
             class="quick-btn"
-            onclick="sendQuickMessage('profitable coins')"
+            onclick="sendQuickMessage('which crypto is most profitable right now')"
           >
             💰 Profitable
           </button>
           <button
             class="quick-btn"
-            onclick="sendQuickMessage('sustainable coins')"
+            onclick="sendQuickMessage('show me sustainable eco friendly coins')"
           >
             🌱 Sustainable
           </button>
           <button
             class="quick-btn"
-            onclick="sendQuickMessage('balanced recommendation')"
+            onclick="sendQuickMessage('what should I invest in for balanced growth')"
           >
             ⚖️ Balanced
           </button>
-          <button class="quick-btn" onclick="sendQuickMessage('help')">
-            ❓ Help
+          <button
+            class="quick-btn"
+            onclick="sendQuickMessage('current bitcoin ethereum prices')"
+          >
+            💎 Prices
+          </button>
+          <button
+            class="quick-btn"
+            onclick="sendQuickMessage('compare cardano and solana')"
+          >
+            🔍 Compare
           </button>
         </div>
         <div class="input-group">
           <input
             type="text"
             id="user-input"
-            placeholder="Ask about cryptocurrencies..."
+            placeholder="Ask naturally: 'Which eco-friendly crypto is trending?'"
             onkeypress="handleKeyPress(event)"
           />
           <button id="send-btn" onclick="sendMessage()">Send</button>
@@ -229,10 +268,67 @@
     <script>
       let chatHistory = [];
 
-      function addMessage(sender, message, details = "", timestamp = "") {
+      function showTypingIndicator() {
+        document.getElementById("typing-indicator").style.display = "block";
+        document.getElementById("chat-messages").scrollTop =
+          document.getElementById("chat-messages").scrollHeight;
+      }
+
+      function hideTypingIndicator() {
+        document.getElementById("typing-indicator").style.display = "none";
+      }
+
+      function updateMarketStatus() {
+        fetch("/market_data")
+          .then((response) => response.json())
+          .then((data) => {
+            const statusElement = document.getElementById("market-status");
+            let totalChange = 0;
+            let coinCount = 0;
+
+            for (const coin in data) {
+              if (data[coin].price_change_percentage_24h) {
+                totalChange += data[coin].price_change_percentage_24h;
+                coinCount++;
+              }
+            }
+
+            const avgChange = totalChange / coinCount;
+            const marketTrend = avgChange >= 0 ? "bullish" : "bearish";
+            const emoji = avgChange >= 0 ? "📈" : "📉";
+
+            statusElement.innerHTML = `${emoji} Market: ${marketTrend.toUpperCase()} | Avg 24h Change: ${avgChange.toFixed(
+              2
+            )}% | Live data from CoinGecko`;
+
+            if (avgChange >= 2) {
+              statusElement.style.background =
+                "linear-gradient(135deg, #28a745, #20c997)";
+            } else if (avgChange <= -2) {
+              statusElement.style.background =
+                "linear-gradient(135deg, #dc3545, #fd7e14)";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching market data:", error);
+            document.getElementById("market-status").innerHTML =
+              "⚠️ Using cached data - API connection issue";
+          });
+      }
+
+      // Update market status every 30 seconds
+      setInterval(updateMarketStatus, 30000);
+
+      function addMessage(
+        sender,
+        message,
+        details = "",
+        timestamp = "",
+        additionalClass = ""
+      ) {
         const chatMessages = document.getElementById("chat-messages");
         const messageDiv = document.createElement("div");
-        messageDiv.className = `message ${sender}-message`;
+        messageDiv.className = `message ${sender}-message ${additionalClass}`;
 
         const bubbleDiv = document.createElement("div");
         bubbleDiv.className = "message-bubble";
@@ -277,6 +373,9 @@
         // Clear input
         userInput.value = "";
 
+        // Show typing indicator
+        showTypingIndicator();
+
         // Send to backend
         fetch("/send_message", {
           method: "POST",
@@ -287,13 +386,30 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            addMessage("bot", data.bot_response, data.details, data.timestamp);
+            hideTypingIndicator();
+
+            // Add sentiment/urgency classes if needed
+            let additionalClass = "";
+            if (data.entities) {
+              if (data.entities.urgency === "high") {
+                additionalClass = "urgency-high";
+              }
+            }
+
+            addMessage(
+              "bot",
+              data.bot_response,
+              data.details,
+              data.timestamp,
+              additionalClass
+            );
           })
           .catch((error) => {
+            hideTypingIndicator();
             console.error("Error:", error);
             addMessage(
               "bot",
-              "Sorry, I encountered an error. Please try again."
+              "Sorry, I encountered an error while analyzing the market. Please try again."
             );
           });
       }
@@ -309,19 +425,20 @@
         }
       }
 
-      // Add welcome message when page loads
+      // Initialize on load
       window.onload = function () {
         setTimeout(() => {
           addMessage(
             "bot",
-            "👋 Hello! I'm CryptoBuddy, your AI-powered financial sidekick!",
-            "I can help you find profitable and sustainable cryptocurrencies. Try asking me about:\n• Profitable coins 📈\n• Sustainable coins 🌱\n• Balanced recommendations ⚖️\n• Specific coins like Bitcoin or Ethereum",
+            "🤖 Welcome to CryptoBuddy Pro!",
+            'I now understand natural language and provide **real-time data**! 🚀\n\nTry asking me:\n• "What\'s trending in crypto right now?"\n• "Show me eco-friendly coins with good growth"\n• "Compare Bitcoin and Ethereum"\n• "What should I invest in for balanced returns?"\n\nI analyze market data live from CoinGecko API!',
             new Date().toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })
           );
-        }, 500);
+          updateMarketStatus();
+        }, 1000);
       };
     </script>
   </body>
