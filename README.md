@@ -1,6 +1,6 @@
 # 💰 CryptoBuddy Pro - Your AI Financial Advisor 💸
 
-![CryptoBuddy Pro Logo](static/logo.png)
+
 
 ## Overview
 
