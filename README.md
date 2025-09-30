@@ -1,7 +1,5 @@
 # 💰 CryptoBuddy Pro - Your AI Financial Advisor 💸
 
-
-
 ## Overview
 
 CryptoBuddy Pro is an advanced AI-powered chatbot designed to guide users through cryptocurrency investments. Built with Flask (Python) for the backend and HTML/CSS/JavaScript for the frontend, it leverages real-time data from the CoinGecko API and natural language processing (NLP) to provide insights into profitable, sustainable, and balanced cryptocurrency options. 💵 The chatbot offers dynamic, user-friendly responses and a modern interface, emphasizing its role as an educational tool, not financial advice.
@@ -21,7 +19,7 @@ CryptoBuddy Pro is an advanced AI-powered chatbot designed to guide users throug
 
 ### Chatbot Interface
 
-![Chatbot Interface](static/screenshots/chatbot-interface.png)
+![Chatbot Interface](screenshots/chatbot-interface.png)
 _Caption_: CryptoBuddy Pro's interface with real-time market status and NLP-driven responses. 💬💰
 
 ### Python Backend (app.py)
