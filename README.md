@@ -26,19 +26,19 @@ _Caption_: CryptoBuddy Pro's interface with real-time market status and NLP-driv
 
 ### Python Backend (app.py)
 
-![app.py Screenshot](static/screenshots/app1.png)
-![app.py Screenshot](static/screenshots/app2.png)
-![app.py Screenshot](static/screenshots/app3.png)
-![app.py Screenshot](static/screenshots/app4.png)
-![app.py Screenshot](static/screenshots/app5.png)
-![app.py Screenshot](static/screenshots/app6.png)
-![app.py Screenshot](static/screenshots/app7.png)
-![app.py Screenshot](static/screenshots/app8.png)
-![app.py Screenshot](static/screenshots/app9.png)
-![app.py Screenshot](static/screenshots/app10.png)
-![app.py Screenshot](static/screenshots/app11.png)
-![app.py Screenshot](static/screenshots/app12.png)
-![app.py Screenshot](static/screenshots/app13.png)
+![app.py Screenshot](screenshots/app1.png)
+![app.py Screenshot](screenshots/app2.png)
+![app.py Screenshot](screenshots/app3.png)
+![app.py Screenshot](screenshots/app4.png)
+![app.py Screenshot](screenshots/app5.png)
+![app.py Screenshot](screenshots/app6.png)
+![app.py Screenshot](screenshots/app7.png)
+![app.py Screenshot](screenshots/app8.png)
+![app.py Screenshot](screenshots/app9.png)
+![app.py Screenshot](screenshots/app10.png)
+![app.py Screenshot](screenshots/app11.png)
+![app.py Screenshot](screenshots/app12.png)
+![app.py Screenshot](screenshots/app13.png)
 
 _Caption_: The Flask backend with CoinGecko API integration and NLP processing. 💻💸
 
